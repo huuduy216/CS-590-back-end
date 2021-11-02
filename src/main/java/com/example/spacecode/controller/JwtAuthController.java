@@ -22,9 +22,10 @@ public class JwtAuthController {
 
     // login
     @RequestMapping(value = "/authentication/login", method = RequestMethod.POST)
-    public String createToken( String username,String password ) throws AuthenticationException {
-        return authService.login( username, password );
+    public String createToken(@RequestBody Map<String, String> map) throws AuthenticationException {
+        return authService.login( map.get("username"), map.get("password") );
     }
+
 
     // register
     @RequestMapping(value = "/authentication/register", method = RequestMethod.POST)
