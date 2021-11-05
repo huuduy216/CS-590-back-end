@@ -5,6 +5,7 @@ import com.example.spacecode.model.User;
 import com.example.spacecode.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class JwtAuthController {
 
@@ -23,10 +23,12 @@ public class JwtAuthController {
 
     // login
     @RequestMapping(value = "/authentication/login", method = RequestMethod.POST)
-    public String createToken(@RequestBody Map<String, String> map) throws AuthenticationException {
-        return authService.login( map.get("username"), map.get("password") );
+    public String createToken(@RequestBody Map<String, String> map ) throws AuthenticationException {
+    	if(map.containsKey("username") && (map.containsKey("password"))){
+            return authService.login(map.get("username"),map.get("password"));
+        }
+        return null;
     }
-
 
     // register
     @RequestMapping(value = "/authentication/register", method = RequestMethod.POST)
@@ -35,9 +37,7 @@ public class JwtAuthController {
 
         if(map.containsKey("username") && (map.containsKey("password"))){
 
-            List<Role> roles = new ArrayList<>();
-            roles.add(new Role(Long.valueOf("1"), "ROLE_NORMAL"));
-            User addedUser = new User(Long.valueOf("16"),map.get("username"),map.get("password"),roles);
+            User addedUser = new User(map.get("username"),map.get("password"));
             return authService.register(addedUser);
         }
         return null;

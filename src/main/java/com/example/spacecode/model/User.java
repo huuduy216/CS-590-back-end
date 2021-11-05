@@ -7,91 +7,135 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
 public class User implements UserDetails {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idRegisteredUser")
+	private int idRegisteredUser;
+	
+	@Column(name = "userName")
+	private String userName;
+	
+	@Column(name = "password", length = 255)
+	private String password;
+	
+	@Column(name = "isAdmin")
+	private Boolean isAdmin;
+	
+	//This is not db field
+	@Transient
+	private Role role;
+	
+	public User() {
+	}
+	
+	public User(String userName, String password)
+	{
+		this.userName = userName;
+		this.password = password;
+		role = isAdmin == null || isAdmin ? new Role(Long.valueOf(1),"ROLE_ADMIN") :  new Role(Long.valueOf(1),"ROLE_NORMAL");
+	}
+	
+	public User(String userName, String password, Boolean isAdmin)
+	{
+		this(userName, password);
+		this.isAdmin = isAdmin;
+		role = isAdmin == null || isAdmin ? new Role(Long.valueOf(1),"ROLE_ADMIN") :  new Role(Long.valueOf(1),"ROLE_NORMAL");
+	}
 
-    private Long id;
+	public int getIdRegisteredUser() {
+		return idRegisteredUser;
+	}
 
-    private String username;
+	public void setIdRegisteredUser(int idRegisteredUser) {
+		this.idRegisteredUser = idRegisteredUser;
+	}
 
-    private String password;
+	public String getUserName() {
+		return userName;
+	}
 
-    private List<Role> roles;
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
 
-    public Long getId() {
-        return id;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+    public Role getRoles() { 
+        return role; 
+    } 
+ 
+    public void setRole(Role role) { 
+        this.role = role; 
+    } 
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return idRegisteredUser == other.idRegisteredUser;
+				
+	}
+	@Override
+    public int hashCode() {
+        return Objects.hash(idRegisteredUser);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+	@Override
+	public String toString() {
+		return "User {idClassification=" + idRegisteredUser + ", userName=" + userName + "}";
+	}
+	 
+    @Override 
+    public boolean isAccountNonExpired() { 
+        return true; 
+    } 
+ 
+    @Override 
+    public boolean isAccountNonLocked() { 
+        return true; 
+    } 
+ 
+    @Override 
+    public boolean isCredentialsNonExpired() { 
+        return true; 
+    } 
+ 
+    @Override 
+    public boolean isEnabled() { 
+        return true; 
+    } 
+ 
+    @Override 
+    public Collection<? extends GrantedAuthority> getAuthorities() { 
+        List<GrantedAuthority> authorities = new ArrayList<>(); 
+        authorities.add( new SimpleGrantedAuthority(isAdmin ? "admin" : "user") ); 
+        return authorities; 
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-    public User(Long id, String username, String password, List<Role> roles) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    // 下面为实现UserDetails而需要的重写方法！
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
-            authorities.add( new SimpleGrantedAuthority( role.getName() ) );
-        }
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
+	@Override
+	public String getUsername() {
+		return userName;
+	} 
 }

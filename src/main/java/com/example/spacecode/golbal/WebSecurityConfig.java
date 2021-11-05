@@ -1,5 +1,6 @@
 package com.example.spacecode.golbal;
 
+import com.example.spacecode.CustromBCryptEncoder;
 import com.example.spacecode.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure( AuthenticationManagerBuilder auth ) throws Exception {
-        auth.userDetailsService( userService ).passwordEncoder( new BCryptPasswordEncoder() );
+        auth.userDetailsService(userService).passwordEncoder( new CustromBCryptEncoder() );
     }
 
     @Override

@@ -13,12 +13,21 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
-    @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(s);
+        User user = userRepository.findbyname(s);
         if (user == null) {
             throw new UsernameNotFoundException("user not exist");
         }
         return user;
     }
+    
+	public String addUser(User user) {
+	
+	try {
+		userRepository.save(user);
+		return "User created";
+	} catch(Exception e) {
+		return "failed";
+	}
+	}
 }
