@@ -1,24 +1,18 @@
 package com.example.spacecode.service;
 
-import com.example.spacecode.CustromBCryptEncoder;
-import com.example.spacecode.dao.UserRepository;
+import com.example.spacecode.dao.UserDao;
 import com.example.spacecode.golbal.JwtTokenUtil;
 import com.example.spacecode.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthServiceImpl implements AuthService {
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
+public class AuthServiceImpl implements AuthService {  @Autowired
+private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -27,50 +21,42 @@ public class AuthServiceImpl implements AuthService {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserDao userDao;
 
 	// login
 	@Override
-	public String login(String username, String password) {
+	public String login( String username, String password ) {
 
 		// find user by username
-		System.out.println("Username to query: " + username);
-		final UserDetails userDetails = userRepository.findbyname(username);
-		BCryptPasswordEncoder encoder = new CustromBCryptEncoder();
-		System.out.println("stored password: " + userDetails.getPassword() + " encoded? " + encoder.matches(password, userDetails.getPassword()));
-		if (!encoder.matches(password, userDetails.getPassword())) {
-			System.out.println("returning null");
-			return null;
+		final UserDetails userDetails = userDao.findbyname(username);
+
+		if(userDetails==null){
+			return "user not exist";
 		}
-		
-		System.out.println("Authenticated!");
-		UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-		System.out.println("UpToken generated");
-		final Authentication authentication = authenticationManager.authenticate(upToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		System.out.println("UpToken authenticated");
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		if(!encoder.matches(password,userDetails.getPassword())){
+			return "password not correct";
+		}
+		//find user by username
 		final String token = jwtTokenUtil.generateToken(userDetails);
-		System.out.println("Token generated");
-		System.out.println("Token: " + token);
 		return token;
 	}
 
 	// register
 	@Override
-	public User register(User userToAdd) {
+	public User register(User userToAdd ) {
 
-		final String username = userToAdd.getUserName();
-		if (userRepository.findbyname(username) != null) {
-			UserDetails details = userRepository.findbyname(username);
-			System.out.println("UserDetails: " + details);
+		final String username = userToAdd.getUsername();
+		if(userDao.findbyname(username)!=null){
 			return null;
 		}
 
-		// encode password
-		BCryptPasswordEncoder encoder = new CustromBCryptEncoder();
+		//encode password
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		final String rawPassword = userToAdd.getPassword();
-		userToAdd.setPassword(encoder.encode(rawPassword));
-		userRepository.save(username, userToAdd.getPassword());
-		return userRepository.findbyname(username);
+		String encodedPassword = encoder.encode(rawPassword);
+		userToAdd.setPassword( encodedPassword);
+		userDao.save(userToAdd.getUsername(),userToAdd.getPassword());
+		return userDao.findbyname(username);
 	}
 }
