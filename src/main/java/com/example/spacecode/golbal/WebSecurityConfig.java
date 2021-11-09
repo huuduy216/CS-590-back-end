@@ -1,5 +1,6 @@
 package com.example.spacecode.golbal;
 
+import com.example.spacecode.service.ClassificationService;
 import com.example.spacecode.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private ClassificationService classificationService;
 
     @Bean
     public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
@@ -51,10 +55,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/authentication/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/classification/**").permitAll()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.PUT).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
-                .antMatchers(HttpMethod.GET).authenticated();
+                .antMatchers(HttpMethod.GET).permitAll();
 
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

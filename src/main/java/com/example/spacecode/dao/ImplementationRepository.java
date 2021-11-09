@@ -1,6 +1,7 @@
 package com.example.spacecode.dao;
-import java.util.ArrayList;
+import javax.transaction.Transactional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +9,11 @@ import org.springframework.data.repository.query.Param;
 import com.example.spacecode.model.Implementation;
 
 public interface ImplementationRepository extends CrudRepository <Implementation, String>{
-	@Query(value = "SELECT classification FROM Classification classification WHERE classification.name = :name", nativeQuery = true)
-	Implementation findbyname(@Param("name") String implementation);
+	@Query(value = "SELECT * FROM Implementation implementation WHERE implementation.name = :name", nativeQuery = true)
+	Implementation findbyname(@Param("name") String name);
+	
+	 @Modifying
+	    @Query(value = "INSERT INTO Implementation (name, testcase) VALUES (:name, :testcase)", nativeQuery = true)
+	    @Transactional
+	    void save(@Param("name") String name, @Param("testcase") String testcase);
 }

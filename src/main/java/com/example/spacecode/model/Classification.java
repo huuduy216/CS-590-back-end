@@ -1,6 +1,7 @@
 package com.example.spacecode.model;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -9,10 +10,14 @@ import java.util.Set;
 public class Classification implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idClassificaiton")
 	private int idClassification;
 	
 	@Column(name = "name")
 	private String name;
+	
+	@OneToMany (mappedBy = "classification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Family> families = new HashSet<Family>();
 		
 	public Classification() {
 	}

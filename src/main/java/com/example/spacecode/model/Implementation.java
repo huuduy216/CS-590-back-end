@@ -5,17 +5,21 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = " Implementation")
+@Table(name = "Implementation")
 
 public class Implementation implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "implementationID")
 	private int implementationID;
 	
 	@Column(name = "name")
 	private String name;
 	@Column(name = "testcase")
 	private String testcase;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	private Implementation implementation;
 	
 	public Implementation() {
 	}
@@ -42,12 +46,12 @@ public class Implementation implements Serializable {
 		this.name = name;
 	}
 
-	public String getBestcase() {
+	public String gettestcase() {
 		return testcase;
 	}
 
-	public void setBestcase(String bestcase) {
-		this.testcase = bestcase;
+	public void settestcase(String testcase) {
+		this.testcase = testcase;
 	}
 
 	@Override
@@ -67,5 +71,11 @@ public class Implementation implements Serializable {
 		return implementationID == other.implementationID;
 	}
 
+	@Override
+	public String toString() {
+		return "Implementation [implementationID=" + implementationID + ", name=" + name + ", testcase=" + testcase
+				+ "]";
+	}
+	
 
 }

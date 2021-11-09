@@ -1,6 +1,5 @@
 package com.example.spacecode.controller;
 
-import com.example.spacecode.model.Role;
 import com.example.spacecode.model.User;
 import com.example.spacecode.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*")
@@ -42,6 +38,5 @@ public class JwtAuthController {
             return authService.register(addedUser);
         }
         return null;
-
     }
 }
