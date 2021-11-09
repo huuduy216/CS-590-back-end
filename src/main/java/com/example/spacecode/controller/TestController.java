@@ -13,14 +13,14 @@ public class TestController {
 
     // TEST NORMAL
     @PreAuthorize("hasAuthority('ROLE_NORMAL')")
-    @RequestMapping( value="/normal/test", method = RequestMethod.GET )
+    @RequestMapping( value="/normal/test", method = RequestMethod.POST )
     public String test1() {
         return "ROLE_NORMAL success！";
     }
 
     // TEST ADMIN
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @RequestMapping( value = "/admin/test", method = RequestMethod.GET )
+    @RequestMapping( value = "/admin/test", method = RequestMethod.POST )
     public String test2() {
         return "ROLE_ADMIN success！";
     }

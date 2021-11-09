@@ -1,5 +1,6 @@
 package com.example.spacecode.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.spacecode.model.Role;
 import com.example.spacecode.model.User;
 import com.example.spacecode.service.AuthService;
@@ -24,7 +25,7 @@ public class JwtAuthController {
 
     // login
     @RequestMapping(value = "/authentication/login", method = RequestMethod.POST)
-    public String createToken(@RequestBody Map<String, String> map ) throws AuthenticationException {
+    public JSONObject createToken(@RequestBody Map<String, String> map ) throws AuthenticationException {
     	if(map.containsKey("username") && (map.containsKey("password"))){
             return authService.login(map.get("username"),map.get("password"));
         }
