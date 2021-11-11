@@ -30,7 +30,7 @@ public class CodeController {
     }
 
     // TEST NORMAL GET TREE
-    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
+//    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
     @RequestMapping( value="/normal/getcodetree", method = RequestMethod.GET )
     public JSONObject getTreeNormal() throws IOException, ParseException {
         FileReader fileReader = new FileReader("src\\main\\java\\com\\example\\spacecode\\asset\\test.json");
