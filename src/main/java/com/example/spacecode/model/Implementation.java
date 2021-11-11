@@ -1,12 +1,12 @@
 package com.example.spacecode.model;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "Implementation")
-
 public class Implementation implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,19 +15,22 @@ public class Implementation implements Serializable {
 	
 	@Column(name = "name")
 	private String name;
-	@Column(name = "testcase")
-	private String testcase;
+	
+	@Column(name = "idFamily")
+	private int idFamily;
+	
+	@OneToMany(mappedBy = "implementation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Problem> problem = new HashSet<>();
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	private Implementation implementation;
+	private Family family;
 	
 	public Implementation() {
 	}
 	
-	public Implementation (String name, String testcase)
+	public Implementation (String name)
 	{
 		this.name = name;
-		this.testcase=testcase;
 		
 	}
 	public int getImplementationID() {
@@ -46,12 +49,20 @@ public class Implementation implements Serializable {
 		this.name = name;
 	}
 
-	public String gettestcase() {
-		return testcase;
+	public int getFamilyId() {
+		return idFamily;
 	}
 
-	public void settestcase(String testcase) {
-		this.testcase = testcase;
+	public void setFamilyId(int idFamily) {
+		this.idFamily = idFamily;
+	}
+	
+	public Set<Problem> getProblem() {
+		return problem;
+	}
+
+	public void setProblem(Set<Problem> problem) {
+		this.problem = problem;
 	}
 
 	@Override
@@ -73,9 +84,7 @@ public class Implementation implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Implementation [implementationID=" + implementationID + ", name=" + name + ", testcase=" + testcase
+		return "Implementation [implementationID=" + implementationID + ", name=" + name + ", problem=" + problem
 				+ "]";
 	}
-	
-
 }

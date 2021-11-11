@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 
 	@Entity
-	@Table(name = " Problem")
+	@Table(name = "Problem")
 	public class Problem implements Serializable{
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +31,14 @@ import javax.persistence.Table;
 		@Column(name = "testcase")
 		private String testcase;
 		
-		@Column(name = "benchMarkId")
-		private int benchMarkId;
-		
+		@Column(name = "idImplementation")
+		private int idImplementation;
 		
 		@ManyToOne(fetch = FetchType.LAZY, optional = false)
-		@JoinColumn(name = "benchMarkID", nullable = false)
-		private Benchmark benchmark;
+		private Implementation implementation;
 		
+		@OneToMany (mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+		private Set<Benchmark> benchmark = new HashSet<>();
 		
 		public int getIdProblem() {
 			return idProblem;
@@ -47,6 +47,15 @@ import javax.persistence.Table;
 
 		public void setIdProblem(int idProblem) {
 			this.idProblem = idProblem;
+		}
+		
+		public int getIdImplementation() {
+			return idImplementation;
+		}
+
+
+		public void setIdImplementation(int idImplementation) {
+			this.idImplementation = idImplementation;
 		}
 
 
@@ -69,23 +78,12 @@ import javax.persistence.Table;
 			this.testcase = testcase;
 		}
 
-
-		public int getBenchMarkId() {
-			return benchMarkId;
-		}
-
-
-		public void setBenchMarkId(int benchMarkId) {
-			this.benchMarkId = benchMarkId;
-		}
-
-
-		public Benchmark getBenchmark() {
+		public Set<Benchmark> getBenchmark() {
 			return benchmark;
 		}
 
 
-		public void setBenchmark(Benchmark benchmark) {
+		public void setBenchmark(Set<Benchmark> benchmark) {
 			this.benchmark = benchmark;
 		}
 
@@ -111,8 +109,7 @@ import javax.persistence.Table;
 
 		@Override
 		public String toString() {
-			return "Problem [idProblem=" + idProblem + ", code=" + code + ", testcase=" + testcase + ", benchMarkId="
-					+ benchMarkId + ", benchmark=" + benchmark + "]";
+			return "Problem [idProblem=" + idProblem + ", code=" + code + ", testcase=" + testcase + ", benchmark=" + benchmark + "]";
 		}
 		
 		

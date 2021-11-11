@@ -23,7 +23,7 @@ public class Family implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private Classification classification;
 	
-	@OneToMany (mappedBy = "implementation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany (mappedBy = "family", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Implementation> implementation = new HashSet<Implementation>();
 	
 	public Family() {

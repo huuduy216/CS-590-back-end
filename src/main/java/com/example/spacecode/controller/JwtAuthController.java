@@ -1,7 +1,11 @@
 package com.example.spacecode.controller;
 
+import com.example.spacecode.model.Classification;
+import com.example.spacecode.model.Implementation;
 import com.example.spacecode.model.User;
 import com.example.spacecode.service.AuthService;
+import com.google.gson.Gson;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +24,7 @@ public class JwtAuthController {
 
     // login
     @RequestMapping(value = "/authentication/login", method = RequestMethod.POST)
-    public String createToken(@RequestBody Map<String, String> map ) throws AuthenticationException {
+    public String createToken(@RequestBody Map<String, String> map) throws AuthenticationException {
     	if(map.containsKey("username") && (map.containsKey("password"))){
             return authService.login(map.get("username"),map.get("password"));
         }
@@ -29,7 +33,7 @@ public class JwtAuthController {
 
     // register
     @RequestMapping(value = "/authentication/register", method = RequestMethod.POST)
-    public User register(@RequestBody Map<String, String> map ) throws AuthenticationException {
+    public User register(@RequestBody Map<String, String> map) throws AuthenticationException {
 
 
         if(map.containsKey("username") && (map.containsKey("password"))){

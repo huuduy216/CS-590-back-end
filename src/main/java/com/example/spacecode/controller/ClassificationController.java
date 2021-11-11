@@ -14,24 +14,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spacecode.model.Classification;
 import com.example.spacecode.service.ClassificationService;
+import com.google.gson.Gson;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class CodeInsertionController {
+public class ClassificationController {
 	 @Autowired
 	 private ClassificationService classificationService;
-
+	 
+	 private Gson gson = new Gson();
 	// add
 	@RequestMapping(value = "/classification", method = RequestMethod.POST)
-	public Classification save(@RequestBody Map<String, String> map ) throws AuthenticationException {
-		System.out.println("Hello");
+	public Classification save(@RequestBody Map<String, String> map) throws AuthenticationException {
 		if(map.containsKey("name")) {
-			System.out.println("Calling service");
 			String name = map.get("name");
 			if (classificationService.get(name) != null) return null;
 	        classificationService.save(name);
 	        return classificationService.get(name);
 	    }
+	    return null;
+	}
+	
+	// save structure
+	@RequestMapping(value = "/classification/save", method = RequestMethod.POST)
+	public Classification save(@RequestBody String data ) throws AuthenticationException {
+		Classification[] classifications = gson.fromJson(data, Classification[].class);
+		for (Classification c : classifications) {
+			if (classificationService.get(c.getName()) != null) continue;
+	        classificationService.saveNestedStructure(c);
+		}
 	    return null;
 	}
 	

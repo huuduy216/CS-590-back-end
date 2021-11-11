@@ -29,8 +29,8 @@ public class Benchmark implements Serializable{
 	@Column(name = "machineConfig")
 	private String machineConfig;
 	
-	@Column(name = "score")
-	private double score;
+	@Column(name = "runTime")
+	private double runTime;
 	
 	@Column(name = "date")
 	private Date date;
@@ -38,9 +38,13 @@ public class Benchmark implements Serializable{
 	@Column(name = "idRegisteredUser")
 	private int idRegisteredUser;
 	
+	@Column(name = "idProblem")
+	private int idProblem;
 	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	private Problem problem;
 	
-	@JoinColumn(name = "idRegisteredUser", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private User user;
 
 	
@@ -49,7 +53,7 @@ public class Benchmark implements Serializable{
 
     public Benchmark(String machineConfig, double score, Date date) {
         this.machineConfig = machineConfig;
-        this.score = score;
+        this.runTime = score;
         this.date = date;
     }
 
@@ -77,6 +81,22 @@ public class Benchmark implements Serializable{
 	public void setIdBenchMark(int idBenchMark) {
 		this.idBenchMark = idBenchMark;
 	}
+	
+	public int getProblemId() {
+		return idProblem;
+	}
+
+	public void setProblemId(int idProblem) {
+		this.idProblem = idProblem;
+	}
+	
+	public int getUserId() {
+		return idRegisteredUser;
+	}
+
+	public void setUserId(int userId) {
+		idRegisteredUser = userId;
+	}
 
 	public String getMachineConfig() {
 		return machineConfig;
@@ -86,12 +106,12 @@ public class Benchmark implements Serializable{
 		this.machineConfig = machineConfig;
 	}
 
-	public double getScore() {
-		return score;
+	public double getRunTime() {
+		return runTime;
 	}
 
-	public void setScore(double score) {
-		this.score = score;
+	public void setRunTime(double runTime) {
+		this.runTime = runTime;
 	}
 
 	public Date getDate() {
@@ -111,7 +131,7 @@ public class Benchmark implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Benchmark [idBenchMark=" + idBenchMark + ", machineConfig=" + machineConfig + ", score=" + score
+		return "Benchmark [idBenchMark=" + idBenchMark + ", machineConfig=" + machineConfig + ", runTime=" + runTime
 				+ ", date=" + date + ", idRegisteredUser=" + idRegisteredUser + ", user=" + user + "]";
 	}
 

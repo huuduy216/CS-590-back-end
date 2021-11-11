@@ -2,6 +2,7 @@ package com.example.spacecode.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,8 +18,11 @@ public class Classification implements Serializable {
 	private String name;
 	
 	@OneToMany (mappedBy = "classification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Family> families = new HashSet<Family>();
+	private Set<Family> family = new HashSet<Family>();
 		
+//	@Transient
+//	private List<Family> family;
+	
 	public Classification() {
 	}
 	
@@ -42,7 +46,15 @@ public class Classification implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	public void setFamily(Set<Family> family) {
+		this.family = family;
+	}
+	
+	public Set<Family> getFamily() {
+		return family;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -62,6 +74,6 @@ public class Classification implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Classification {idClassification=" + idClassification + ", name=" + name + "}";
+		return "Classification {idClassification=" + idClassification + ", name=" + name + " family:" + family + " }";
 	}
 }
