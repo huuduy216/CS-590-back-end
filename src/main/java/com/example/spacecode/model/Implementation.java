@@ -12,19 +12,21 @@ public class Implementation implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int implementationID;
 	
-	@Column(name = "name")
-	private String name;
-	@Column(name = "testcase")
-	private String testcase;
+	@Column(name = "title")
+	private String title;
+	@Column(name = "Identitykey")
+	private String Identitykey;
+	@Column(name = "language")
+	private String language;
 	
 	public Implementation() {
 	}
 	
-	public Implementation (String name, String testcase)
+	public Implementation (String title, String language,String Identitykey)
 	{
-		this.name = name;
-		this.testcase=testcase;
-		
+		this.title = title;
+		this.language=language;
+		this.Identitykey = Identitykey;
 	}
 	public int getImplementationID() {
 		return implementationID;
@@ -34,38 +36,27 @@ public class Implementation implements Serializable {
 		this.implementationID = implementationID;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getBestcase() {
-		return testcase;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setBestcase(String bestcase) {
-		this.testcase = bestcase;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(implementationID);
-	}
+	public void setIdentitykey(String Identitykey){this.Identitykey = Identitykey;}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Implementation other = (Implementation) obj;
-		return implementationID == other.implementationID;
-	}
+	public String getIdentitykey(){return Identitykey;}
+
+
 
 
 }

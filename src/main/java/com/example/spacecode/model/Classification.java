@@ -7,19 +7,29 @@ import java.util.Set;
 @Entity
 @Table(name = "Classification")
 public class Classification implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idClassificaiton")
 	private int idClassification;
 	
 	@Column(name = "name")
 	private String name;
-		
+
+	@Column(name = "Identitykey")
+	private String Identitykey;
+
+	@Column(name = "desription")
+	private String desription;
+
+
 	public Classification() {
 	}
-	
-	public Classification(String name)
-	{
+
+	public Classification(String name, String Identitykey, String desription) {
 		this.name = name;
+		this.Identitykey = Identitykey;
+		this.desription = desription;
 	}
 
 	public int getIdClassification() {
@@ -38,25 +48,21 @@ public class Classification implements Serializable {
 		this.name = name;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Classification other = (Classification) obj;
-		return idClassification == other.idClassification;
-				
+	public String getIdentitykey() {
+		return Identitykey;
 	}
-	@Override
-    public int hashCode() {
-        return Objects.hash(idClassification);
-    }
 
-	@Override
-	public String toString() {
-		return "Classification {idClassification=" + idClassification + ", name=" + name + "}";
+	public void setIdentitykey(String Identitykey) {
+		this.Identitykey = Identitykey;
 	}
+
+	public String getDesription() {
+		return desription;
+	}
+
+	public void setDesription(String desription) {
+		this.desription = desription;
+	}
+
+
 }

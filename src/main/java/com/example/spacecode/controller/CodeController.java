@@ -1,9 +1,11 @@
 package com.example.spacecode.controller;
 
 
-import org.json.simple.JSONObject;
+import com.alibaba.fastjson.JSONObject;
+import com.example.spacecode.service.CodeService;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,29 +20,23 @@ import java.util.Map;
 @RestController
 public class CodeController {
 
-    boolean trigger=true;
+    @Autowired
+    private CodeService codeService;
+
     // TEST NORMAL POST TREE
     @PreAuthorize("hasAuthority('ROLE_NORMAL')")
     @RequestMapping( value="/normal/codetree", method = RequestMethod.POST )
     public String postTreeNormal(@RequestBody JSONObject json) throws IOException {
-        FileWriter file = new FileWriter("src\\main\\java\\com\\example\\spacecode\\asset\\test.json",false);
-        file.write(json.toJSONString());
-        file.flush();
+        codeService.postCodeTree(json);
+        codeService.postCodeTreeDetail(json);
         return "post tree success";
     }
 
     // TEST NORMAL GET TREE
 //    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
     @RequestMapping( value="/normal/getcodetree", method = RequestMethod.GET )
-    public JSONObject getTreeNormal() throws IOException, ParseException {
-        FileReader fileReader = new FileReader("src\\main\\java\\com\\example\\spacecode\\asset\\test.json");
-        if(trigger){
-            trigger=false;
-            fileReader= new FileReader("src\\main\\java\\com\\example\\spacecode\\asset\\tree.json");
-        }
-        JSONParser parser = new JSONParser();
-        Object obj = parser.parse(fileReader);
-        JSONObject jsonObject = (JSONObject) obj;
+    public org.json.simple.JSONObject getTreeNormal() throws IOException, ParseException {
+        org.json.simple.JSONObject jsonObject = codeService.getCodeTree();
         return jsonObject;
     }
 
