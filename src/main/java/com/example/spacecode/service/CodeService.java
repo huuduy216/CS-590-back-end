@@ -11,4 +11,6 @@ public interface CodeService {
     void postCodeTree(JSONObject json) throws IOException;
     org.json.simple.JSONObject getCodeTree() throws IOException, ParseException;
     void postCodeTreeDetail(JSONObject json);
+    void postClassificationContent(JSONObject json);
+    JSONObject getClassificationContent(String key);
 }

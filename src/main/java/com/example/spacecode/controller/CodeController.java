@@ -2,6 +2,7 @@ package com.example.spacecode.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.spacecode.model.Classification;
 import com.example.spacecode.service.CodeService;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -40,7 +41,21 @@ public class CodeController {
         return jsonObject;
     }
 
-    // TEST ADMIN GET TREE
+    //Modify Classification Content
+    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
+    @RequestMapping( value="/normal/classification", method = RequestMethod.POST )
+    public String postClassification(@RequestBody JSONObject json) throws IOException {
+        codeService.postClassificationContent(json);
+        return "post classifiction success";
+    }
+
+    @RequestMapping( value="/all/getclassification", method = RequestMethod.POST )
+    public JSONObject getClassification(@RequestBody JSONObject json) throws IOException {
+        String key = json.get("key").toString();
+        return codeService.getClassificationContent(key);
+    }
+
+ ////////// TEST ADMIN GET TREE
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping( value = "/admin/codetree", method = RequestMethod.GET )
     public String getTreeAdmin() {

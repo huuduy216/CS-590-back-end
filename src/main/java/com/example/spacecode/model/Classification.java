@@ -16,6 +16,9 @@ public class Classification implements Serializable {
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "subtitle")
+	private String subtitle;
+
 	@Column(name = "Identitykey")
 	private String Identitykey;
 
@@ -26,10 +29,11 @@ public class Classification implements Serializable {
 	public Classification() {
 	}
 
-	public Classification(String name, String Identitykey, String desription) {
+	public Classification(String name, String Identitykey, String desription,String subtitle) {
 		this.name = name;
 		this.Identitykey = Identitykey;
 		this.desription = desription;
+		this.subtitle = subtitle;
 	}
 
 	public int getIdClassification() {
@@ -64,5 +68,11 @@ public class Classification implements Serializable {
 		this.desription = desription;
 	}
 
+	public String getSubtitle() {
+		return subtitle;
+	}
 
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
 }

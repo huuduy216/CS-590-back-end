@@ -11,22 +11,23 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.*;
 import java.util.List;
+import java.io.IOException;
+
 
 @Service
 public class CodeServiceImpl implements CodeService {
 
     boolean trigger = true;
 
+    //local
     final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
     final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
 
+    //aws
+//    final String testFile = "./test.json";
+//    final String treeFile = "./tree.json";
     @Autowired
     ImplementationDao implementationDao;
 
@@ -40,10 +41,10 @@ public class CodeServiceImpl implements CodeService {
     }
 
     public org.json.simple.JSONObject getCodeTree() throws IOException, ParseException {
-        FileReader fileReader = new FileReader("src\\main\\java\\com\\example\\spacecode\\asset\\test.json");
+        FileReader fileReader = new FileReader(testFile);
         if (trigger) {
             trigger = false;
-            fileReader = new FileReader("src\\main\\java\\com\\example\\spacecode\\asset\\tree.json");
+            fileReader = new FileReader(treeFile);
         }
         org.json.simple.parser.JSONParser parser = new org.json.simple.parser.JSONParser();
         Object obj = parser.parse(fileReader);
@@ -56,8 +57,6 @@ public class CodeServiceImpl implements CodeService {
         analyseTree(json, classificationList);
         for (Classification classification : classificationList) {
             Integer classId = classification.getIdClassification();
-            System.out.println("-----------------------");
-            System.out.println(classId);
             classificationDao.removeByIdClassification(classId);
         }
     }
@@ -71,13 +70,39 @@ public class CodeServiceImpl implements CodeService {
                 String key = newchildren.get("key").toString();
                 Classification classification = classificationDao.findByIdentitykey(key);
                 if (classification == null) {
-                    classificationDao.save(name, key, "");
+                    classificationDao.save(name, key, "", "");
                 } else {
+                    String subtitle = classification.getSubtitle();
+                    String textbody = classification.getDesription();
                     classificationList.remove(classification);
-                    classificationDao.updateByClassification(key,name,"");
+                    classificationDao.removeByIdClassification(classification.getIdClassification());
+                    classificationDao.save(name, key, textbody, subtitle);
                 }
             }
             analyseTree(newchildren, classificationList);
+        }
+    }
+
+    public JSONObject getClassificationContent(String key){
+        Classification classification = classificationDao.findByIdentitykey(key);
+        if(classification!=null){
+            JSONObject json = new JSONObject();
+            json.put("subtitle",classification.getSubtitle());
+            json.put("textbody",classification.getDesription());
+            json.put("type","classification");
+            json.put("title",classification.getName());
+            return json;
+        }
+        return null;
+    }
+
+    public void postClassificationContent(JSONObject json) {
+        String key = json.get("key").toString();
+        String subtitle = json.get("subtitle").toString();
+        String textbody = json.get("textbody").toString();
+        Classification classification = classificationDao.findByIdentitykey(key);
+        if(classification!=null){
+            classificationDao.updateByClassificationContent(key,textbody,subtitle);
         }
     }
 }

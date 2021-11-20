@@ -17,9 +17,9 @@ public interface ClassificationDao extends CrudRepository<Classification, String
     Classification findByIdentitykey(String Identitykey);
 
     @Modifying
-    @Query(value = "INSERT INTO Classification  (name, Identitykey,desription ) VALUES (:name, :Identitykey,:desription)", nativeQuery = true)
+    @Query(value = "INSERT INTO Classification  (name, Identitykey,subtitle,desription ) VALUES (:name, :Identitykey,:subtitle,:desription)", nativeQuery = true)
     @Transactional
-    void save(@Param("name") String name, @Param("Identitykey") String Identitykey, @Param("desription") String desription);
+    void save(@Param("name") String name, @Param("Identitykey") String Identitykey, @Param("desription") String desription,@Param("subtitle") String subtitle);
 
     @Query(value = "SELECT * FROM Classification classification", nativeQuery = true)
     List<Classification> getAll();
@@ -30,7 +30,13 @@ public interface ClassificationDao extends CrudRepository<Classification, String
     void removeByIdClassification(@Param("idClassificaiton") Integer idClassificaiton);
 
     @Modifying
-    @Query(value = "UPDATE Classification SET name =:name,desription =:desription WHERE Identitykey =:Identitykey", nativeQuery = true)
+    @Query(value = "UPDATE Classification SET name =:name,subtitle =:subtitle,desription =:desription WHERE Identitykey =:Identitykey", nativeQuery = true)
     @Transactional
-    void updateByClassification( @Param("Identitykey") String Identitykey,@Param("name") String name, @Param("desription") String desription);
+    void updateByClassification( @Param("Identitykey") String Identitykey,@Param("name") String name, @Param("desription") String desription,@Param("subtitle") String subtitle);
+
+    @Modifying
+    @Query(value = "UPDATE Classification SET subtitle =:subtitle,desription =:desription WHERE Identitykey =:Identitykey", nativeQuery = true)
+    @Transactional
+    void updateByClassificationContent( @Param("Identitykey") String Identitykey, @Param("desription") String desription,@Param("subtitle") String subtitle);
+
 }
