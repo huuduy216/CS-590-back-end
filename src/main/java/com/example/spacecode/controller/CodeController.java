@@ -1,21 +1,16 @@
 package com.example.spacecode.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.spacecode.model.Classification;
 import com.example.spacecode.service.CodeService;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -27,9 +22,10 @@ public class CodeController {
     // TEST NORMAL POST TREE
     @PreAuthorize("hasAuthority('ROLE_NORMAL')")
     @RequestMapping( value="/normal/codetree", method = RequestMethod.POST )
-    public String postTreeNormal(@RequestBody JSONObject json) throws IOException {
-        codeService.postCodeTree(json);
-        codeService.postCodeTreeDetail(json);
+    public String postTreeNormal(@RequestBody JSONArray json) throws IOException {
+        JSONObject tree = json.getJSONObject(0);
+        codeService.postCodeTree(tree);
+        codeService.postCodeTreeDetail(tree);
         return "post tree success";
     }
 
@@ -53,6 +49,32 @@ public class CodeController {
     public JSONObject getClassification(@RequestBody JSONObject json) throws IOException {
         String key = json.get("key").toString();
         return codeService.getClassificationContent(key);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
+    @RequestMapping( value="/normal/subclassification", method = RequestMethod.POST )
+    public String postSubClassification(@RequestBody JSONObject json) throws IOException {
+        codeService.postFamilyContent(json);
+        return "post sub_classification success";
+    }
+
+    @RequestMapping( value="/all/getsubclassification", method = RequestMethod.POST )
+    public JSONObject getSubClassification(@RequestBody JSONObject json) throws IOException {
+        String key = json.get("key").toString();
+        return codeService.getFamilyContent(key);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
+    @RequestMapping( value="/normal/algorithm", method = RequestMethod.POST )
+    public String postAlgorithm(@RequestBody JSONObject json) throws IOException {
+        codeService.postAlgorithmContent(json);
+        return "post algorithm success";
+    }
+
+    @RequestMapping( value="/all/getalgorithm", method = RequestMethod.POST )
+    public JSONObject getAlgorithm(@RequestBody JSONObject json) throws IOException {
+        String key = json.get("key").toString();
+        return codeService.getAlgorithmContent(key);
     }
 
  ////////// TEST ADMIN GET TREE

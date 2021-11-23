@@ -12,7 +12,8 @@ import java.util.List;
 
 public interface ClassificationDao extends CrudRepository<Classification, String> {
 
-//    @Query(value = "SELECT * FROM Classification WHERE Identitykey = :Identitykey", nativeQuery = true)
+    Classification findClassificationByIdClassification(Integer IdClassification);
+
     @Query(value = "SELECT * FROM Classification WHERE Identitykey = :Identitykey", nativeQuery = true)
     Classification findByIdentitykey(String Identitykey);
 
@@ -30,13 +31,18 @@ public interface ClassificationDao extends CrudRepository<Classification, String
     void removeByIdClassification(@Param("idClassificaiton") Integer idClassificaiton);
 
     @Modifying
-    @Query(value = "UPDATE Classification SET name =:name,subtitle =:subtitle,desription =:desription WHERE Identitykey =:Identitykey", nativeQuery = true)
+    @Query(value = "UPDATE Classification SET name =:name, Identitykey = :Identitykey WHERE idClassificaiton =:idClassificaiton", nativeQuery = true)
     @Transactional
-    void updateByClassification( @Param("Identitykey") String Identitykey,@Param("name") String name, @Param("desription") String desription,@Param("subtitle") String subtitle);
+    void updateByClassification( @Param("name") String name,@Param("Identitykey") String Identitykey,@Param("idClassificaiton") Integer idClassificaiton);
 
     @Modifying
     @Query(value = "UPDATE Classification SET subtitle =:subtitle,desription =:desription WHERE Identitykey =:Identitykey", nativeQuery = true)
     @Transactional
     void updateByClassificationContent( @Param("Identitykey") String Identitykey, @Param("desription") String desription,@Param("subtitle") String subtitle);
+
+    @Modifying
+    @Query(value = "ALTER TABLE Classification AUTO_INCREMENT = 1", nativeQuery = true)
+    @Transactional
+    void resetId();
 
 }
