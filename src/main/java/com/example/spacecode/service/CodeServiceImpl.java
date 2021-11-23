@@ -26,12 +26,12 @@ public class CodeServiceImpl implements CodeService {
     boolean trigger = true;
 
     //local
-    final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
-    final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
+//    final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
+//    final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
 
     //aws
-//    final String testFile = "./test.json";
-//    final String treeFile = "./tree.json";
+    final String testFile = "./test.json";
+    final String treeFile = "./tree.json";
     @Autowired
     ImplementationDao implementationDao;
 
