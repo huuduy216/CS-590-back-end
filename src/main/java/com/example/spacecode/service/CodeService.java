@@ -17,4 +17,8 @@ public interface CodeService {
     void postFamilyContent(JSONObject json);
     JSONObject getAlgorithmContent(String key);
     void postAlgorithmContent(JSONObject json);
+    void postImplementationContent(JSONObject json);
+    JSONObject getImplementationContent(String key,String language);
+    void postBenchmark(JSONObject json);
+    JSONObject getBenchmark(JSONObject json);
 }

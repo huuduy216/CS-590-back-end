@@ -5,58 +5,81 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = " Implementation")
+@Table(name = " Implementations")
 
 public class Implementation implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int implementationID;
+	@Column(name = "idImplementation")
+	private int idImplementation;
 	
-	@Column(name = "title")
-	private String title;
-	@Column(name = "Identitykey")
-	private String Identitykey;
-	@Column(name = "language")
-	private String language;
-	
+	@Column(name = "languageName")
+	private String languageName;
+	@Column(name = "subtitle")
+	private String subtitle;
+	@Column(name = "description")
+	private String description;
+	@Column(name = "code")
+	private String code;
+	@Column(name = "id_Algorithm")
+	private int id_Algorithm;
+
 	public Implementation() {
 	}
-	
-	public Implementation (String title, String language,String Identitykey)
-	{
-		this.title = title;
-		this.language=language;
-		this.Identitykey = Identitykey;
-	}
-	public int getImplementationID() {
-		return implementationID;
+
+	public Implementation(String languageName, String subtitle, String description, String code, int id_Algorithm) {
+		this.languageName = languageName;
+		this.subtitle = subtitle;
+		this.description = description;
+		this.code = code;
+		this.id_Algorithm = id_Algorithm;
 	}
 
-	public void setImplementationID(int implementationID) {
-		this.implementationID = implementationID;
+	public int getIdImplementation() {
+		return idImplementation;
 	}
 
-	public String getTitle() {
-		return title;
+	public void setIdImplementation(int idImplementation) {
+		this.idImplementation = idImplementation;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public String getLanguageName() {
+		return languageName;
 	}
 
-	public String getLanguage() {
-		return language;
+	public void setLanguageName(String languageName) {
+		this.languageName = languageName;
 	}
 
-	public void setLanguage(String language) {
-		this.language = language;
+	public String getSubtitle() {
+		return subtitle;
 	}
 
-	public void setIdentitykey(String Identitykey){this.Identitykey = Identitykey;}
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
 
-	public String getIdentitykey(){return Identitykey;}
+	public String getDescription() {
+		return description;
+	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
+	public String getCode() {
+		return code;
+	}
 
+	public void setCode(String code) {
+		this.code = code;
+	}
 
+	public int getId_Algorithm() {
+		return id_Algorithm;
+	}
+
+	public void setId_Algorithm(int id_Algorithm) {
+		this.id_Algorithm = id_Algorithm;
+	}
 }

@@ -77,6 +77,37 @@ public class CodeController {
         return codeService.getAlgorithmContent(key);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
+    @RequestMapping( value="/normal/implementation", method = RequestMethod.POST )
+    public String postImplementation(@RequestBody JSONObject json) throws IOException {
+        codeService.postImplementationContent(json);
+        return "post implementation success";
+    }
+
+    @RequestMapping( value="/all/getimplementation", method = RequestMethod.POST )
+    public JSONObject getImplementation(@RequestBody JSONObject json) throws IOException {
+        String fatherKey = json.get("fatherKey").toString();
+        String language = json.get("language").toString();
+        return codeService.getImplementationContent(fatherKey,language);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_NORMAL')")
+    @RequestMapping( value="/normal/problem", method = RequestMethod.POST )
+    public String postProblem(@RequestBody JSONObject json) throws IOException {
+        System.out.println(json.toJSONString());
+        return "post problem success";
+    }
+
+    @RequestMapping( value="/all/benchmark", method = RequestMethod.POST )
+    public String postBenchmark(@RequestBody JSONObject json) throws IOException {
+        codeService.postBenchmark(json);
+        return "post benchmark success";
+    }
+
+    @RequestMapping( value="/all/getbenchmark", method = RequestMethod.POST )
+    public JSONObject getBenchmark(@RequestBody JSONObject json) throws IOException {
+        return codeService.getBenchmark(json);
+    }
  ////////// TEST ADMIN GET TREE
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping( value = "/admin/codetree", method = RequestMethod.GET )

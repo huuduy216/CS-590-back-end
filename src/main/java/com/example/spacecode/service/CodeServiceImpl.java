@@ -3,19 +3,15 @@ package com.example.spacecode.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.example.spacecode.dao.AlgorithmDao;
-import com.example.spacecode.dao.ClassificationDao;
-import com.example.spacecode.dao.FamilyDao;
-import com.example.spacecode.dao.ImplementationDao;
-import com.example.spacecode.model.Algorithm;
-import com.example.spacecode.model.Classification;
-import com.example.spacecode.model.Family;
+import com.example.spacecode.dao.*;
+import com.example.spacecode.model.*;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 
@@ -26,14 +22,12 @@ public class CodeServiceImpl implements CodeService {
     boolean trigger = true;
 
     //local
-//    final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
-//    final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
+    final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
+    final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
 
     //aws
-    final String testFile = "./test.json";
-    final String treeFile = "./tree.json";
-    @Autowired
-    ImplementationDao implementationDao;
+//    final String testFile = "./test.json";
+//    final String treeFile = "./tree.json";
 
     @Autowired
     ClassificationDao classificationDao;
@@ -43,6 +37,12 @@ public class CodeServiceImpl implements CodeService {
 
     @Autowired
     AlgorithmDao algorithmDao;
+
+    @Autowired
+    ImplementationDao implementationDao;
+
+    @Autowired
+    BenchmarkDao benchmarkDao;
 
     public void postCodeTree(JSONObject json) throws IOException {
         FileWriter file = new FileWriter(testFile, false);
@@ -66,6 +66,7 @@ public class CodeServiceImpl implements CodeService {
         List<Classification> classificationList = classificationDao.getAll();
         List<Family> families = familyDao.getAll();
         List<Algorithm> algorithms = algorithmDao.getAll();
+
         JSONObject jsonObjectDB = new JSONObject();
         for (Classification classification : classificationList) {
             Integer id = classification.getIdClassification();
@@ -84,7 +85,6 @@ public class CodeServiceImpl implements CodeService {
     }
 
     public void postCodeTreeDetail(JSONObject json) {
-        System.out.println(json.toJSONString());
         List<Classification> classificationList = classificationDao.getAll();
         List<Family> families = familyDao.getAll();
         List<Algorithm> algorithms = algorithmDao.getAll();
@@ -93,7 +93,6 @@ public class CodeServiceImpl implements CodeService {
             Integer classId = classification.getIdClassification();
             classificationDao.removeByIdClassification(classId);
         }
-
         for (Family family : families) {
             Integer familyId = family.getIdFamily();
             familyDao.removeByIdFamily(familyId);
@@ -102,6 +101,7 @@ public class CodeServiceImpl implements CodeService {
             Integer algorithmId = algorithm.getIdAlgorithm();
             algorithmDao.removeByIdAlgorithm(algorithmId);
         }
+
     }
 
     public void analyseTree(JSONObject json, List<Classification> classificationList, List<Family> families, List<Algorithm> algorithms) {
@@ -127,7 +127,7 @@ public class CodeServiceImpl implements CodeService {
                     familyDao.save(name, key, "", "");
                 } else {
                     Integer familyidNum = Integer.parseInt(familyid);
-                    familyDao.updateByFamily(name,key,familyidNum);
+                    familyDao.updateByFamily(name, key, familyidNum);
                     families.remove(familyDao.findFamilyByIdFamily(familyidNum));
                 }
             } else if ((newchildren.get("type").toString()).equals("algorithm_type")) {
@@ -138,7 +138,7 @@ public class CodeServiceImpl implements CodeService {
                     algorithmDao.save(name, key, "", "");
                 } else {
                     Integer algoridNum = Integer.parseInt(algorid);
-                    algorithmDao.updateByAlgorithm(name,key,algoridNum);
+                    algorithmDao.updateByAlgorithm(name, key, algoridNum);
                     algorithms.remove(algorithmDao.findAlgorithmByIdAlgorithm(algoridNum));
                 }
             }
@@ -230,6 +230,79 @@ public class CodeServiceImpl implements CodeService {
         Algorithm algorithm = algorithmDao.findByIdentitykey(key);
         if (algorithm != null) {
             algorithmDao.updateByAlgorithmContent(key, textbody, subtitle);
+        }
+    }
+
+    public JSONObject getImplementationContent(String key, String language) {
+        Algorithm algorithm = algorithmDao.findByIdentitykey(key);
+        if (algorithm == null) {
+            JSONObject json = new JSONObject();
+            json.put("subtitle", "");
+            json.put("textbody", "");
+            json.put("code", "");
+            return json;
+        } else {
+            Integer algorithmId = algorithm.getIdAlgorithm();
+            Implementation implementation = implementationDao.findImplementationByLanguageNameAndFk(language, algorithmId);
+            JSONObject json = new JSONObject();
+            if (implementation == null) {
+                json.put("subtitle", "");
+                json.put("textbody", "");
+                json.put("code", "");
+                return json;
+            } else {
+                json.put("subtitle", implementation.getSubtitle());
+                json.put("textbody", implementation.getDescription());
+                json.put("code", implementation.getCode());
+                return json;
+            }
+        }
+    }
+
+    public void postImplementationContent(JSONObject json) {
+        String key = json.get("key").toString();
+        String language = json.get("language").toString();
+        String codebody = json.get("codebody").toString();
+        Algorithm algorithm = algorithmDao.findByIdentitykey(key);
+        if (algorithm != null) {
+            Integer algorithmId = algorithm.getIdAlgorithm();
+            Implementation implementation = implementationDao.findImplementationByLanguageNameAndFk(language, algorithmId);
+            if (implementation == null) {
+                implementationDao.save("", "", language, codebody, algorithm.getIdAlgorithm());
+            } else {
+                implementationDao.updateByImplementationContent(codebody, language, algorithmId);
+            }
+        }
+    }
+
+    public JSONObject getBenchmark(JSONObject json){
+        String algorkey = json.get("algorKey").toString();
+        Algorithm algorithm = algorithmDao.findByIdentitykey(algorkey);
+        ArrayList<Benchmark> benchmarks = new ArrayList<Benchmark>();
+        if(algorithm!=null){
+            benchmarks = benchmarkDao.findBenchmarksByFk(algorithm.getIdAlgorithm());
+        }
+        json.put("benchmarks",benchmarks);
+        return json;
+    }
+
+    public void postBenchmark(JSONObject json) {
+        Integer algorithmId = Integer.parseInt(json.get("algorId").toString());
+        String username = json.get("username").toString();
+        String date = json.get("date").toString();
+        String cpu = json.get("cpu").toString();
+        String ram = json.get("ram").toString();
+        String gpu = json.get("gpu").toString();
+        String L1 = json.get("L1").toString();
+        String L2 = json.get("L2").toString();
+        String L3 = json.get("L3").toString();
+        String time = json.get("time").toString();
+        String space = json.get("space").toString();
+        Integer like = Integer.parseInt(json.get("like").toString());
+        Integer star = Integer.parseInt(json.get("star").toString());
+        Algorithm algorithm = algorithmDao.findAlgorithmByIdAlgorithm(algorithmId);
+        if (algorithm != null) {
+           benchmarkDao.save(username,date,cpu,ram,gpu,L1,L2,L3,time,space,like,star,algorithmId);
         }
     }
 }
