@@ -22,12 +22,12 @@ public class CodeServiceImpl implements CodeService {
     boolean trigger = true;
 
     //local
-    final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
-    final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
+//    final String testFile = "src\\main\\java\\com\\example\\spacecode\\asset\\test.json";
+//    final String treeFile = "src\\main\\java\\com\\example\\spacecode\\asset\\tree.json";
 
     //aws
-//    final String testFile = "./test.json";
-//    final String treeFile = "./tree.json";
+    final String testFile = "./test.json";
+    final String treeFile = "./tree.json";
 
     @Autowired
     ClassificationDao classificationDao;
@@ -52,10 +52,10 @@ public class CodeServiceImpl implements CodeService {
 
     public org.json.simple.JSONObject getCodeTree() throws IOException, ParseException {
         FileReader fileReader = new FileReader(testFile);
-        if (trigger) {
-            trigger = false;
-            fileReader = new FileReader(treeFile);
-        }
+//        if (trigger) {
+//            trigger = false;
+//            fileReader = new FileReader(treeFile);
+//        }
         // json.DB: file
         org.json.simple.parser.JSONParser parser = new org.json.simple.parser.JSONParser();
         Object obj = parser.parse(fileReader);
@@ -277,10 +277,12 @@ public class CodeServiceImpl implements CodeService {
 
     public JSONObject getBenchmark(JSONObject json){
         String algorkey = json.get("algorKey").toString();
+        String benchmarkType = json.get("benchmarkType").toString();
         Algorithm algorithm = algorithmDao.findByIdentitykey(algorkey);
         ArrayList<Benchmark> benchmarks = new ArrayList<Benchmark>();
+        ArrayList benchmarkInfo=new ArrayList();
         if(algorithm!=null){
-            benchmarks = benchmarkDao.findBenchmarksByFk(algorithm.getIdAlgorithm());
+            benchmarks = benchmarkDao.findBenchmarksByFkAndType(algorithm.getIdAlgorithm(),benchmarkType);
         }
         json.put("benchmarks",benchmarks);
         return json;
@@ -290,6 +292,7 @@ public class CodeServiceImpl implements CodeService {
         Integer algorithmId = Integer.parseInt(json.get("algorId").toString());
         String username = json.get("username").toString();
         String date = json.get("date").toString();
+        String benchmarkType = json.get("benchmarkType").toString();
         String cpu = json.get("cpu").toString();
         String ram = json.get("ram").toString();
         String gpu = json.get("gpu").toString();
@@ -302,7 +305,12 @@ public class CodeServiceImpl implements CodeService {
         Integer star = Integer.parseInt(json.get("star").toString());
         Algorithm algorithm = algorithmDao.findAlgorithmByIdAlgorithm(algorithmId);
         if (algorithm != null) {
-           benchmarkDao.save(username,date,cpu,ram,gpu,L1,L2,L3,time,space,like,star,algorithmId);
+           benchmarkDao.save(username,date,benchmarkType,cpu,ram,gpu,L1,L2,L3,time,space,like,star,algorithmId);
         }
+    }
+
+    public void deleteBenchmark(JSONObject json){
+        Integer idBenchmark = Integer.parseInt(json.get("idBenchmark").toString());
+        benchmarkDao.removeByIdBenchmark(idBenchmark);
     }
 }

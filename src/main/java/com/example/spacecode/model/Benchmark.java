@@ -15,6 +15,8 @@ public class Benchmark  implements Serializable {
     private String username;
     @Column(name = "date")
     private String date;
+    @Column(name = "benchmarkType")
+    private String benchmarkType;
     @Column(name = "cpu")
     private String cpu;
     @Column(name = "ram")
@@ -41,9 +43,10 @@ public class Benchmark  implements Serializable {
     public Benchmark() {
     }
 
-    public Benchmark(String username, String date, String cpu, String ram, String gpu, String l1, String l2, String l3, String time, String space, String likes, String stars, int id_Algorithm) {
+    public Benchmark(String username, String date, String benchmarkType, String cpu, String ram, String gpu, String l1, String l2, String l3, String time, String space, String likes, String stars, int id_Algorithm) {
         this.username = username;
         this.date = date;
+        this.benchmarkType = benchmarkType;
         this.cpu = cpu;
         this.ram = ram;
         this.gpu = gpu;
@@ -83,6 +86,14 @@ public class Benchmark  implements Serializable {
 
     public String getCpu() {
         return cpu;
+    }
+
+    public String getBenchmarkType() {
+        return benchmarkType;
+    }
+
+    public void setBenchmarkType(String benchmarkType) {
+        this.benchmarkType = benchmarkType;
     }
 
     public void setCpu(String cpu) {

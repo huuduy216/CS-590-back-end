@@ -21,4 +21,5 @@ public interface CodeService {
     JSONObject getImplementationContent(String key,String language);
     void postBenchmark(JSONObject json);
     JSONObject getBenchmark(JSONObject json);
+    void deleteBenchmark(JSONObject json);
 }
