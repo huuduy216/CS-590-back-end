@@ -74,4 +74,9 @@ private AuthenticationManager authenticationManager;
 		userDao.save(userToAdd.getUsername(),userToAdd.getPassword());
 		return userDao.findbyname(username);
 	}
+
+	@Override
+	public void delete(String userName) {
+		userDao.delete(userName);
+	}
 }

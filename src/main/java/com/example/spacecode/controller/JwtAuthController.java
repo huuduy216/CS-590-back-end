@@ -45,4 +45,11 @@ public class JwtAuthController {
         return null;
 
     }
+    
+    @RequestMapping(value = "/authentication/delete", method = RequestMethod.POST)
+    public void delete(@RequestBody Map<String, String> map ) throws AuthenticationException {
+        if (map.containsKey("username")){
+            authService.delete(map.get("username"));
+        }
+    }
 }
