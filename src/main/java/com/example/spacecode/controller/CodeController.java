@@ -115,8 +115,20 @@ public class CodeController {
         codeService.deleteBenchmark(json);
         return "delete benchmark successfully";
     }
-
-    ////////// TEST ADMIN GET TREE
+    
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping( value = "/all/getUsersActivity", method = RequestMethod.GET )
+    public JSONArray getUserHistory() {
+        return codeService.getUserHistory();
+    }
+    
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RequestMapping( value = "/all/setUsersActivity", method = RequestMethod.POST )
+    public void setUserHistory(@RequestBody JSONArray json) {
+        codeService.setUserHistory(json);
+    }
+    
+ ////////// TEST ADMIN GET TREE
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/admin/codetree", method = RequestMethod.GET)
     public String getTreeAdmin() {

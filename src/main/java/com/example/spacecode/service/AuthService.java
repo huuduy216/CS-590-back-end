@@ -7,4 +7,5 @@ public interface  AuthService {
 
     User register( User userToAdd );
     JSONObject login(String username, String password );
+    void delete(String userName);
 }

@@ -1,5 +1,6 @@
 package com.example.spacecode.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.spacecode.model.User;
 import org.json.simple.parser.ParseException;
@@ -20,6 +21,8 @@ public interface CodeService {
     void postImplementationContent(JSONObject json);
     JSONObject getImplementationContent(String key,String language);
     void postBenchmark(JSONObject json);
+    JSONArray getUserHistory();
+    void setUserHistory(JSONArray json);
     JSONObject getBenchmark(JSONObject json);
     void deleteBenchmark(JSONObject json);
 }

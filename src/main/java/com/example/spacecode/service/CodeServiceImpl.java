@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.io.IOException;
 
@@ -44,6 +45,9 @@ public class CodeServiceImpl implements CodeService {
     @Autowired
     BenchmarkDao benchmarkDao;
 
+    @Autowired
+    HistoryDao historyDao;
+    
     public void postCodeTree(JSONObject json) throws IOException {
         FileWriter file = new FileWriter(testFile, false);
         file.write(json.toJSONString());
@@ -286,6 +290,25 @@ public class CodeServiceImpl implements CodeService {
         }
         json.put("benchmarks",benchmarks);
         return json;
+    }
+    
+    public JSONArray getUserHistory(){
+        JSONArray json = new JSONArray();
+        ArrayList<History> history = historyDao.getHistory();
+        for (History his : history) {
+        	String key = "user";
+        	json.add(his);
+        }
+        return json;
+    }
+    
+    public void setUserHistory(JSONArray json){
+        ArrayList<History> history = new ArrayList<>();
+        Iterator<Object> iter = json.iterator();
+        while (iter.hasNext()) {
+        	History temp = (History) iter.next();
+        	historyDao.save(temp.getUserName(), temp.getHistory());
+        }
     }
 
     public void postBenchmark(JSONObject json) {
