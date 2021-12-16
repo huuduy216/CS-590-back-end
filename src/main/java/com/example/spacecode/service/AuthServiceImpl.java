@@ -78,5 +78,6 @@ private AuthenticationManager authenticationManager;
 	@Override
 	public void delete(String userName) {
 		userDao.delete(userName);
+		userDao.deleteHistory(userName);
 	}
 }

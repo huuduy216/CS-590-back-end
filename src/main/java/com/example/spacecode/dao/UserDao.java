@@ -26,4 +26,9 @@ public interface UserDao extends CrudRepository<User,String> {
     @Transactional
     void delete(@Param("userName") String userName);
 
+    @Modifying
+    @Query(value = "DELETE FROM History WHERE (userName = :userName)", nativeQuery = true)
+    @Transactional
+    void deleteHistory(@Param("userName") String userName);
+
 }

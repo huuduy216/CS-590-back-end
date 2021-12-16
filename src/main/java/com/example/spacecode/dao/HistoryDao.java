@@ -18,7 +18,7 @@ public interface HistoryDao  extends CrudRepository<History,String> {
     ArrayList<History> getHistory();
     
     @Modifying
-    @Query(value = "INSERT INTO history (username, history.history) VALUES (:userName, :history) ON DUPLICATE KEY UPDATE history.history = :history", nativeQuery = true)
+    @Query(value = "INSERT INTO History (username, History.history) VALUES (:userName, :history) ON DUPLICATE KEY UPDATE History.history = :history", nativeQuery = true)
     @Transactional
     void save(@Param("userName") String userName, @Param("history") String history);
 }

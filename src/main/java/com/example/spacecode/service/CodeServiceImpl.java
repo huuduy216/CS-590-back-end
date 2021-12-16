@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.io.IOException;
 
@@ -306,8 +307,8 @@ public class CodeServiceImpl implements CodeService {
         ArrayList<History> history = new ArrayList<>();
         Iterator<Object> iter = json.iterator();
         while (iter.hasNext()) {
-        	History temp = (History) iter.next();
-        	historyDao.save(temp.getUserName(), temp.getHistory());
+        	LinkedHashMap<String, String> temp = (LinkedHashMap<String, String>) iter.next();
+        	historyDao.save(temp.get("username"), temp.get("history"));
         }
     }
 
