@@ -34,4 +34,15 @@ public class HistoryTest {
 			String userName = null;
 			assertNotEquals("History {history=" + history + ", userName=" + userName + "}",h1.toString());
 		}
+
+	@Test
+	public void equalstest() {
+		//History test for equals
+		History h1 = new History("abc","123");
+		History h2 = new History("abc","123");
+		History h3 = new History("abdc","123");
+
+		assertEquals(h1,h2);
+		assertNotEquals(h1,h3);
+	}
 }

@@ -24,9 +24,6 @@ public class History {
 	@Column(name = "history")
 	private String history;
 	
-	public History() {
-	}
-	
 	public History(String userName, String history)
 	{
 		this.userName = userName;

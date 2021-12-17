@@ -1,15 +1,10 @@
 package com.example.spacecode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
-
-
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.spacecode.model.Benchmark;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 public class BenchmarkTest {
 
 	@Test
@@ -31,6 +26,7 @@ public class BenchmarkTest {
 		assertEquals("star",b1.getStars());
 		assertEquals(1,b1.getId_Algorithm());
 	}
+
 	@Test
 	void BenchmarkSetterTest()
 	{
@@ -63,5 +59,7 @@ public class BenchmarkTest {
 		assertEquals("l3",b1.getL3());
 		assertEquals("star",b1.getStars());
 		assertEquals(1,b1.getId_Algorithm());
+		b1.setIdBenchmark(1);
+		assertEquals(1,b1.getIdBenchmark());
 	}
 }

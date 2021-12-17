@@ -20,14 +20,4 @@ public class UserService implements UserDetailsService {
         }
         return user;
     }
-    
-	public String addUser(User user) {
-	
-	try {
-        userDao.save(user);
-		return "User created";
-	} catch(Exception e) {
-		return "failed";
-	}
-	}
 }

@@ -1,14 +1,11 @@
 package com.example.spacecode;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.example.spacecode.model.Role;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.boot.test.context.SpringBootTest;
-
 import com.example.spacecode.model.User;
+
+import static org.junit.Assert.*;
 
 public class UserTest {
 	private static String USER_NAME = "admin";
@@ -39,6 +36,8 @@ public class UserTest {
 		assertEquals("admin1", u1.getUsername());
 		u1.setIdRegisteredUser(99);
 		assertEquals(99, u1.getIdRegisteredUser());
+		u1.setRole(new Role((long) 11, "test role"));
+		assertEquals(u1.getRoles().getName(), "test role");
 	}
 
 	@Test
@@ -48,4 +47,22 @@ public class UserTest {
 		assertEquals("User {idClassification=123, userName=" + USER_NAME + "}", u1.toString());
 	}
 
+	@Test
+	public void equalstest() {
+		User user1 = new User("abc","123");
+		User user2 = new User("abc","123");
+		User user3 = new User("asdf","456");
+		user3.setIdRegisteredUser(3);
+
+		assertEquals(user1,user2);
+		assertNotEquals(user1,user3);
+	}
+
+	@Test
+	void permitTest() {
+		User u = new User("test", "pass");
+		assertTrue(u.isAccountNonExpired());
+		assertTrue(u.isAccountNonLocked());
+		assertTrue(u.isCredentialsNonExpired());
+	}
 }
